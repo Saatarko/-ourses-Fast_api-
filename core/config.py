@@ -10,6 +10,12 @@ DB_PATH = BASE_DIR / "my.dbsqlite3"
 
 class AccessToken(BaseModel):
     lifetime_second: int = 3600
+    reset_password_token_secret: str = (
+        "15eddcf6f24f18ba2f4f7286fee40acd7a16e3d8d832ce7feb28638825d056ff"
+    )
+    verification_token_secret: str = (
+        "2497496b444b2b2caf34463ab3ca20b7c670c5331d01a2c3c8e1358dc4e9745d"
+    )
 
 
 class DbSetting(BaseModel):
