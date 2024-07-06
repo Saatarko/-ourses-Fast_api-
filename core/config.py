@@ -8,6 +8,10 @@ BASE_DIR = Path(__file__).parent.parent
 DB_PATH = BASE_DIR / "my.dbsqlite3"
 
 
+class AccessToken(BaseModel):
+    lifetime_second: int = 3600
+
+
 class DbSetting(BaseModel):
     url: str = f"sqlite+aiosqlite:///{DB_PATH}"
     echo: bool = False
@@ -26,6 +30,7 @@ class Settings(BaseSettings):
 
     # db_echo: bool = True  # отображает sql запросы в консоле
     db: DbSetting = DbSetting()
+    access_token: AccessToken = AccessToken()
 
 
 settings = Settings()
