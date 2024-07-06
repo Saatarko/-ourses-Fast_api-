@@ -9,6 +9,8 @@ if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import (AsyncSession)
 
 
+# модель для стратегии на получение tokena
+
 async def get_access_token_db(
         session: Annotated['AsyncSession',
         Depends(db_helper.session_getter),
