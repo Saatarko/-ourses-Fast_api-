@@ -12,12 +12,14 @@ from .base import Base
 from core.type.user_id import UserIdType
 
 if TYPE_CHECKING:
-    from sqlalchemy.ext.asyncio import (AsyncSession)
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class AccessToken(Base, SQLAlchemyBaseAccessTokenTable[UserIdType]):
     user_id: Mapped[UserIdType] = mapped_column(
-        Integer, ForeignKey("user.id", ondelete="cascade"), nullable=False
+        Integer,
+        ForeignKey("user.id", ondelete="cascade"),
+        nullable=False,
     )
 
     @classmethod

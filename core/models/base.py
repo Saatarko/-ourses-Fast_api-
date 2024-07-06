@@ -18,6 +18,3 @@ class Base(DeclarativeBase):
     @declared_attr.directive  # переопределение название таблицы(создается автоматом из навзания класса)
     def __tablename__(cls) -> str:
         return cls.__name__.lower()
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    # общее для всех таблиц наличие id вынесено в базовую
