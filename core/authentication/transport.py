@@ -1,6 +1,9 @@
-
-# это трансопрт (т.е где будет переджватсья токен)_
 from fastapi_users.authentication import BearerTransport
 
-bearer_transport = BearerTransport(tokenUrl="auth/jwt/login")
+from core.config import settings
 
+
+# это трансопрт (т.е где будет переджватсья токен)_
+bearer_transport = BearerTransport(
+    tokenUrl=settings.api.bearer_token_url,
+)
