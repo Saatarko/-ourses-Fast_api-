@@ -15,7 +15,7 @@ get_user_manager_context = contextlib.asynccontextmanager(get_user_manager)
 
 
 default_email = "saatar@tut.by"
-default_password = "abc"
+default_password = "111"
 default_is_active = True
 default_is_superuser = True
 default_is_verified = True
