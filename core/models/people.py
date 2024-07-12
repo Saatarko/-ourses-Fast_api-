@@ -15,6 +15,7 @@ class People(Base, IdIntPkMixin):
     first_name = Column(String(30))
     last_name = Column(String(30))
     age = Column(Integer)
+
     user_id = Column(Integer, ForeignKey('user.id'), unique=True)
     user = relationship('User', back_populates='people')
     status_id = Column(Integer, ForeignKey('status.id'), unique=True)
