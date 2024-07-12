@@ -7,6 +7,7 @@ from fastapi import FastAPI, Path, Query, Body
 from core.models import db_helper
 from api import router as api_router
 from core.Courses.views import router as courses_router
+from core.Status.view import router as status_router
 
 
 @asynccontextmanager
@@ -28,6 +29,10 @@ main_app.include_router(
 main_app.include_router(
     courses_router,
 )
+main_app.include_router(
+    status_router,
+)
+
 
 
 if __name__ == "__main__":

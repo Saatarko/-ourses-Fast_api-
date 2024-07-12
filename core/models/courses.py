@@ -1,12 +1,21 @@
-from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from typing import TYPE_CHECKING
+
+from sqlalchemy import String, Column, Integer
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from core.models import Base
 from core.models.mixins.id_int_pk import IdIntPkMixin
 
 
-class Courses(Base, IdIntPkMixin):
+if TYPE_CHECKING:
+    from core.models import People
 
-    name: Mapped[str] = mapped_column(String(30))
-    description: Mapped[str] = mapped_column(String(100))
-    price: Mapped[int]
+class Courses(Base, IdIntPkMixin):
+    name = Column(String(30))
+    description = Column(String(100))
+    price = Column(Integer)
+    people = relationship(
+        'People',
+        secondary='people_courses_association',
+        back_populates='courses'
+    )
