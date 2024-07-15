@@ -18,7 +18,7 @@ class People(Base, IdIntPkMixin):
 
     user_id = Column(Integer, ForeignKey('user.id'), unique=True)
     user = relationship('User', back_populates='people')
-    status_id = Column(Integer, ForeignKey('status.id'), unique=True)
+    status_id = Column(Integer, ForeignKey('status.id'), unique=False)
     status = relationship('Status', back_populates='people')
     courses = relationship(
         'Courses',

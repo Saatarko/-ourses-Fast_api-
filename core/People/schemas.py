@@ -20,3 +20,6 @@ class Peoples(PeopleSchemas):  #  данные для вывода чтобы id
 
 class PeopleSchemasCreate(PeopleSchemas):  #  создание
     pass
+
+class PeopleSchemasUpdate(PeopleSchemas):  #  создание
+    pass

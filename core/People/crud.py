@@ -5,7 +5,7 @@ from fastapi import Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from core.People.schemas import PeopleSchemasCreate
+from core.People.schemas import PeopleSchemasCreate, PeopleSchemasUpdate
 from core.models import People, User
 from sqlalchemy.engine import Result
 from api.api_v1.fastapi_user_routers import current_user
@@ -46,8 +46,49 @@ async def create_people(
 
 
 
-async def get_people(session: AsyncSession) -> list[People]:  # ожидаем список курсов
+async def get_people(session: AsyncSession) -> list[People]:  # ожидаем список людей
     stmt = select(People).order_by(People.id)  # получаем списолк игроков из базы
     result: Result = await session.execute(stmt)  # получаем резуллттат
     people = result.scalars().all()
     return list(people)
+
+async def get_one_people(session: AsyncSession, pk: int, user: User) ->People:  # ожидаем данные по 1 челвеку
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+        )
+    stmt = select(People).filter(People.id==pk).order_by(People.id)  # получаем списолк игроков из базы
+    result: Result = await session.execute(stmt)  # получаем резуллттат
+    people = result.scalars().first()
+    return people
+
+
+async def update_one_people(session: AsyncSession,
+                            pk: int,
+                            people_in: PeopleSchemasUpdate,
+                            user: User) -> People:
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+        )
+    stmt = select(People).filter(People.id == pk).order_by(People.id)
+    result: Result = await session.execute(stmt)
+    people = result.scalars().first()
+
+    if people is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="People not found",
+        )
+
+    people.first_name = people_in.first_name
+    people.last_name = people_in.last_name
+    people.age = people_in.age
+
+    await session.commit()
+    await session.refresh(people)
+    return people
+
