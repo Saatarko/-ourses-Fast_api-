@@ -1,8 +1,8 @@
-"""Migration tabs
+"""create all tables
 
-Revision ID: 599200097f57
+Revision ID: e9b9b1f8c283
 Revises: 
-Create Date: 2024-07-12 12:36:13.898245
+Create Date: 2024-07-15 17:15:24.893337
 
 """
 
@@ -14,7 +14,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "599200097f57"
+revision: str = "e9b9b1f8c283"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -83,7 +83,6 @@ def upgrade() -> None:
             ["user.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("status_id"),
         sa.UniqueConstraint("user_id"),
     )
     op.create_table(
