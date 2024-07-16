@@ -7,9 +7,10 @@ from pydantic import BaseModel, Field, ConfigDict
 class CoursesSchemas(BaseModel):
     name: str = Field(..., max_length=30, min_length=3)
     description: Annotated[
-        str, MinLen(5), MaxLen(100)
+        str, MinLen(5), MaxLen(1000)
     ]  # два разных метода обозначения валидации
     price: int
+    id: int
 
     class Config:
         from_attributes = True

@@ -5,9 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.api_v1.fastapi_user_routers import current_superuser
 from core.Courses import crud
-from core.Courses.schemas import CoursesSchemas, CoursesSchemasCreate
+from core.Courses.schemas import CoursesSchemas, CoursesSchemasCreate, Courses
 from core.config import settings
-from core.models import Courses, db_helper, User
+from core.models import db_helper, User
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # if TYPE_CHECKING:

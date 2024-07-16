@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 class Courses(Base, IdIntPkMixin):
     name = Column(String(30))
-    description = Column(String(100))
+    description = Column(String(1000))
     price = Column(Integer)
     people = relationship(
         'People',
