@@ -13,4 +13,5 @@ if TYPE_CHECKING:
 
 class Status(Base, IdIntPkMixin):
     name = Column(String(30), unique=True, index=True)
+
     people = relationship('People', back_populates='status')

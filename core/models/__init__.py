@@ -6,7 +6,10 @@ __all__ = (
     "Courses",
     'People',
     'Status',
-    'PeopleCoursesAssociation'
+    'PeopleCoursesAssociation',
+    'Groups',
+    'Lessons',
+    'Chat'
 )
 
 from .db_helper import db_helper
@@ -17,3 +20,6 @@ from .courses import Courses
 from .status import Status
 from .people import People
 from .people_courses_assosiations import PeopleCoursesAssociation
+from .groups import Groups
+from .lessons import Lessons
+from .chat import Chat

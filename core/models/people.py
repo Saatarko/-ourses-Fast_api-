@@ -8,7 +8,7 @@ from core.models import Base, User, Status, Courses
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
-    from core.models import Base, User, Status, Courses
+    from core.models import Base, Groups
 
 
 class People(Base, IdIntPkMixin):
@@ -18,8 +18,13 @@ class People(Base, IdIntPkMixin):
 
     user_id = Column(Integer, ForeignKey('user.id'), unique=True)
     user = relationship('User', back_populates='people')
+
     status_id = Column(Integer, ForeignKey('status.id'))
     status = relationship('Status', back_populates='people')
+
+    groups_id = Column(Integer, ForeignKey('groups.id'))
+    groups = relationship('Groups', back_populates='people')
+
     courses = relationship(
         'Courses',
         secondary='people_courses_association',

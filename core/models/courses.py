@@ -6,14 +6,19 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from core.models import Base
 from core.models.mixins.id_int_pk import IdIntPkMixin
 
-
 if TYPE_CHECKING:
-    from core.models import People
+    from core.models import People, Groups, Lessons
+
 
 class Courses(Base, IdIntPkMixin):
     name = Column(String(30))
     description = Column(String(1000))
     price = Column(Integer)
+
+    groups = relationship('Groups', back_populates='courses', uselist=False)
+
+    lessons = relationship('Lessons', back_populates='status')
+
     people = relationship(
         'People',
         secondary='people_courses_association',
