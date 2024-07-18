@@ -5,7 +5,10 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).parent.parent
 
+
 DB_PATH = BASE_DIR / "my.dbsqlite3"
+
+UPLOAD_DIR = "uploads/"
 
 
 class ApiV1Prefix(BaseModel):
@@ -16,6 +19,8 @@ class ApiV1Prefix(BaseModel):
     courses: str = "/courses"
     status: str = "/status"
     people: str = "/people"
+    peoplecoursesassociation: str = '/peoplecoursesassociation'
+    groups: str = '/groups'
 
 
 class ApiPrefix(BaseModel):

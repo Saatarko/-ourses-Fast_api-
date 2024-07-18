@@ -20,6 +20,5 @@ class Groups(Base, IdIntPkMixin):
 
     people = relationship('People', back_populates='groups')
 
-    chat_id = Column(Integer, ForeignKey('chat.id'))
     chat = relationship('Chat', back_populates='groups')
 

@@ -8,8 +8,7 @@ from core.models.mixins.id_int_pk import IdIntPkMixin
 from core.models import Base
 
 if TYPE_CHECKING:
-
-    from core.models import Base
+    from core.models import Base, Groups
 
 
 class Chat(Base, IdIntPkMixin):
@@ -17,7 +16,5 @@ class Chat(Base, IdIntPkMixin):
     content = Column(String(500))
     timestamp = Column(DateTime, default=func.now())
 
-
-    courses_id = Column(Integer, ForeignKey('courses.id'))
-    courses = relationship('Courses', back_populates='lessons')
-
+    groups_id = Column(Integer, ForeignKey('groups.id'))
+    groups = relationship('Groups', back_populates='chat')

@@ -9,6 +9,7 @@ from api import router as api_router
 from core.Courses.views import router as courses_router
 from core.Status.view import router as status_router
 from core.People.view import router as people_router
+from core.PeopleCoursesAssociation.view import router as people_courses_router
 
 
 @asynccontextmanager
@@ -36,6 +37,10 @@ main_app.include_router(
 
 main_app.include_router(
     people_router,
+)
+
+main_app.include_router(
+    people_courses_router,
 )
 
 if __name__ == "__main__":

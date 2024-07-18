@@ -23,3 +23,8 @@ class PeopleSchemasCreate(PeopleSchemas):  #  создание
 
 class PeopleSchemasUpdate(PeopleSchemas):  #  создание
     pass
+
+
+class PeopleSchemasAddGroupe(PeopleSchemas):  #  создание
+    groups_id: int
+

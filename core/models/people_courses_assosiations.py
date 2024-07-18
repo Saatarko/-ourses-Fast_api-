@@ -18,3 +18,5 @@ class PeopleCoursesAssociation(Base, IdIntPkMixin):
     )
     people_id = Column(Integer, ForeignKey('people.id'))
     courses_id = Column(Integer, ForeignKey('courses.id'))
+
+    

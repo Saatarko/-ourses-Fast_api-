@@ -7,7 +7,7 @@ from core.models import Base
 from core.models.mixins.id_int_pk import IdIntPkMixin
 
 if TYPE_CHECKING:
-    from core.models import People, Groups, Lessons
+    from core.models import People, Groups, Lessons, Chat
 
 
 class Courses(Base, IdIntPkMixin):
@@ -15,9 +15,10 @@ class Courses(Base, IdIntPkMixin):
     description = Column(String(1000))
     price = Column(Integer)
 
-    groups = relationship('Groups', back_populates='courses', uselist=False)
+    groups = relationship('Groups', back_populates='courses')
 
-    lessons = relationship('Lessons', back_populates='status')
+    lessons = relationship('Lessons', back_populates='courses')
+
 
     people = relationship(
         'People',

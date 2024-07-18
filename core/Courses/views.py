@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Annotated
 
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.api_v1.fastapi_user_routers import current_superuser
+from api.api_v1.fastapi_user_routers import current_superuser, current_user
 from core.Courses import crud
 from core.Courses.schemas import CoursesSchemas, CoursesSchemasCreate, Courses
 from core.config import settings
@@ -25,8 +25,8 @@ router = APIRouter(
 
 @router.get("/", response_model=List[CoursesSchemas])
 async def get_courses(
+    user: Annotated[User, Depends(current_user)],
     session: AsyncSession = Depends(db_helper.scope_session_dependency),
-    user: User = Depends(current_superuser),
 ):
 
     courses = await crud.get_courses(session=session)
