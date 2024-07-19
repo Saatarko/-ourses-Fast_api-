@@ -13,6 +13,9 @@ class PeopleSchemas(BaseModel):
         from_attributes = True
 
 
+class PeopleCheckResponceSchemas(BaseModel):
+    courses_and_groups_check: dict
+
 class Peoples(PeopleSchemas):  #  данные для вывода чтобы id не выводиь вместе со всеми
     model_config = ConfigDict(from_attributes=True)
     id: int
@@ -26,5 +29,6 @@ class PeopleSchemasUpdate(PeopleSchemas):  #  создание
 
 
 class PeopleSchemasAddGroupe(PeopleSchemas):  #  создание
-    groups_id: int
+    # groups_id: int
+    groupe_name: str
 

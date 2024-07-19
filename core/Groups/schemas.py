@@ -19,3 +19,7 @@ class Groups(GroupsSchemas):  #  данные для вывода чтобы id 
 
 class GroupsSchemasCreate(GroupsSchemas):  #  создание
     pass
+
+
+class GroupsSchemasTakeOne(BaseModel):  #  создание
+    name: str

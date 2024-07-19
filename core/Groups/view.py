@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.api_v1.fastapi_user_routers import current_superuser, current_user
 from core.Groups import crud
-from core.Groups.schemas import GroupsSchemas, GroupsSchemasCreate
+from core.Groups.schemas import GroupsSchemas, GroupsSchemasCreate, GroupsSchemasTakeOne
 
 from core.config import settings
 from core.models import db_helper, User
@@ -39,7 +39,7 @@ async def get_create_groups(
 
 
 @router.get("/", response_model=List[GroupsSchemas])
-async def get_courses(
+async def get_groups(
         user: Annotated[User, Depends(current_user)],
         session: AsyncSession = Depends(db_helper.scope_session_dependency),
 ):
@@ -48,3 +48,20 @@ async def get_courses(
     groups_schemas = [GroupsSchemas.from_orm(group) for group in groups]
 
     return groups_schemas
+
+
+@router.get("/{pk}", response_model=GroupsSchemasTakeOne)
+async def get_one_group(
+        groupe_in: GroupsSchemasTakeOne,
+        user: Annotated[User, Depends(current_user)],
+        session: AsyncSession = Depends(db_helper.scope_session_dependency),
+):
+    groupe = await crud.get_one_group(session=session, groupe_in=groupe_in, user=user)
+    if groupe:
+        return groupe
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Группа с таким названием не найдена",
+        )
+

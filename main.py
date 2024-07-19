@@ -10,6 +10,9 @@ from core.Courses.views import router as courses_router
 from core.Status.view import router as status_router
 from core.People.view import router as people_router
 from core.PeopleCoursesAssociation.view import router as people_courses_router
+from core.Groups.view import router as groups_router
+from core.PeopleGroupsAssociation.view import router as people_groups_router
+
 
 
 @asynccontextmanager
@@ -42,6 +45,14 @@ main_app.include_router(
 main_app.include_router(
     people_courses_router,
 )
+
+main_app.include_router(
+    groups_router,
+)
+main_app.include_router(
+    people_groups_router,
+)
+
 
 if __name__ == "__main__":
     uvicorn.run("main:main_app", host="127.0.0.1", port=8000, reload=True)

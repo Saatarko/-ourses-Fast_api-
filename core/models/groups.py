@@ -8,7 +8,7 @@ from core.models import Base
 
 if TYPE_CHECKING:
 
-    from core.models import Base, Courses, Chat
+    from core.models import Base, Courses, Chat, People
 
 
 class Groups(Base, IdIntPkMixin):
@@ -18,7 +18,10 @@ class Groups(Base, IdIntPkMixin):
     courses_id = Column(Integer, ForeignKey('courses.id'))
     courses = relationship('Courses', back_populates='groups')
 
-    people = relationship('People', back_populates='groups')
-
     chat = relationship('Chat', back_populates='groups')
 
+    people = relationship(
+        'People',
+        secondary='people_groups_association',
+        back_populates='groups'
+    )

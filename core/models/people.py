@@ -22,11 +22,14 @@ class People(Base, IdIntPkMixin):
     status_id = Column(Integer, ForeignKey('status.id'))
     status = relationship('Status', back_populates='people')
 
-    groups_id = Column(Integer, ForeignKey('groups.id'))
-    groups = relationship('Groups', back_populates='people')
-
     courses = relationship(
         'Courses',
         secondary='people_courses_association',
+        back_populates='people'
+    )
+
+    groups = relationship(
+        'Groups',
+        secondary='people_groups_association',
         back_populates='people'
     )
