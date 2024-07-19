@@ -40,6 +40,23 @@ async def create_people(
 ):
     return await crud.create_people(session=session, people_in=people_in, user=user)
 
+@router.post("/add_student", response_model=PeopleSchemasAddGroupe)
+async def add_student(
+        people_in: PeopleSchemasAddGroupe,
+        user: Annotated[User, Depends(current_user)],
+        session: AsyncSession = Depends(db_helper.scope_session_dependency),
+):
+    return await crud.add_student(session=session, user=user, people_in=people_in)
+
+@router.get("/check", response_model=PeopleCheckResponceSchemas)
+async def check_people(
+        user: Annotated[User, Depends(current_user)],
+        session: AsyncSession = Depends(db_helper.scope_session_dependency),
+):
+
+    courses_and_groups_check = await crud.check_people(session=session, user=user)
+    return PeopleCheckResponceSchemas(courses_and_groups_check=courses_and_groups_check)
+
 @router.get("/{pk}", response_model=PeopleSchemas)
 async def get_one_people(
         pk: int,
@@ -60,18 +77,5 @@ async def update_one_people(
 ):
     return await crud.update_one_people(session=session, pk=pk, user=user, people_in=people_in)
 
-@router.post("/add_student", response_model=PeopleSchemasAddGroupe)
-async def add_student(
-        people_in: PeopleSchemasAddGroupe,
-        user: Annotated[User, Depends(current_user)],
-        session: AsyncSession = Depends(db_helper.scope_session_dependency),
-):
-    return await crud.add_student(session=session, user=user, people_in=people_in)
 
-@router.get("/check", response_model=PeopleCheckResponceSchemas)
-async def check_people(
-        user: Annotated[User, Depends(current_user)],
-        session: AsyncSession = Depends(db_helper.scope_session_dependency),
-):
-    courses_and_groups_check = await crud.check_people(session=session, user=user)
-    return PeopleCheckResponceSchemas(courses_and_groups_check=courses_and_groups_check)
+

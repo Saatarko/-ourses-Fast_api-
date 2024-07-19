@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.api_v1.fastapi_user_routers import current_superuser, current_user
 from core.PeopleGroupsAssociation.schemas import PeopleGroupsAssociationSchemas, PeopleGroupsAssociationSchemasResponse, \
-    PeopleGroupsAssociationSchemasCreate
+    PeopleGroupsAssociationSchemasCreate, OnePeopleGroupsSchemasResponse
 from core.config import settings
 from core.models import db_helper, User
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -35,6 +35,20 @@ async def get_peoples_and_groups(
     peoples_and_groups_schemas = [PeopleGroupsAssociationSchemas.from_orm(people) for people in peoples_and_groups]
 
     return peoples_and_groups_schemas
+
+
+@router.get("/check", response_model=List[OnePeopleGroupsSchemasResponse])
+async def get_one_peoples_and_groups(
+        user: Annotated[User, Depends(current_user)],
+        session: AsyncSession = Depends(db_helper.scope_session_dependency),
+):
+    groups = await crud.get_one_peoples_and_groups(session=session, user=user)
+
+    # ``groups`` это список объектов `Groups`
+    groups_schemas = [OnePeopleGroupsSchemasResponse.from_orm(group) for group in groups]
+
+    return groups_schemas
+
 
 
 @router.post(

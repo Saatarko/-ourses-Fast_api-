@@ -1,11 +1,12 @@
 import asyncio
-from typing import Annotated
+from typing import Annotated, List
 
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
-from core.PeopleGroupsAssociation.schemas import PeopleGroupsAssociationSchemasCreate
+from core.PeopleGroupsAssociation.schemas import PeopleGroupsAssociationSchemasCreate, OnePeopleGroupsSchemasResponse
 from core.models import User, PeopleGroupsAssociation, People, Groups
 from sqlalchemy.engine import Result
 from api.api_v1.fastapi_user_routers import current_user
@@ -76,3 +77,33 @@ async def create_peoples_and_groups(
     await session.commit()
     await session.refresh(peoples_and_groups)  # обновляем данные перед возвратом
     return peoples_and_groups
+
+
+async def get_one_peoples_and_groups(
+        session: AsyncSession,
+        user: User,
+) -> List[Groups]:
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+        )
+
+    temp_id = user.id
+
+    stmt = (
+        select(Groups)
+        .join(PeopleGroupsAssociation)
+        .filter(PeopleGroupsAssociation.people_id == temp_id)
+    )
+
+    result = await session.execute(stmt)
+    groups = result.scalars().all()
+
+    if not groups:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Группы не найдены для данного пользователя.",
+        )
+
+    return groups

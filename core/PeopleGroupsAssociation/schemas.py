@@ -18,6 +18,16 @@ class PeopleGroupsAssociationSchemasResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class OnePeopleGroupsSchemasResponse(BaseModel):
+    id: int
+    name: str
+    date_start: str
+
+    class Config:
+        from_attributes = True # Позволяет использовать модель ORM в качестве источника данных
+
+
 class PeopleGroupsAssociation(PeopleGroupsAssociationSchemas):
     #  данные для вывода чтобы id не выводиь вместе со всеми
     model_config = ConfigDict(from_attributes=True)
