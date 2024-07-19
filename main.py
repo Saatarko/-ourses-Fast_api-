@@ -12,6 +12,7 @@ from core.People.view import router as people_router
 from core.PeopleCoursesAssociation.view import router as people_courses_router
 from core.Groups.view import router as groups_router
 from core.PeopleGroupsAssociation.view import router as people_groups_router
+from core.Lessons.view import router as lessons_router
 
 
 
@@ -52,6 +53,11 @@ main_app.include_router(
 main_app.include_router(
     people_groups_router,
 )
+main_app.include_router(
+    lessons_router,
+)
+
+
 
 
 if __name__ == "__main__":
