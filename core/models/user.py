@@ -11,6 +11,7 @@ from core.type.user_id import UserIdType
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
     from core.models.people import People
+    from core.models.chat import Chat
 
 
 # объявление класса user из fast-api users
@@ -22,3 +23,5 @@ class User(Base, IdIntPkMixin, SQLAlchemyBaseUserTable[UserIdType]):
         return SQLAlchemyUserDatabase(session, cls)
 
     people: Mapped['People'] = relationship('People', back_populates='user', uselist=False)
+
+    chat: Mapped['Chat'] = relationship('Chat', back_populates='user')
