@@ -5,6 +5,7 @@ from typing import Annotated, List
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
+from sqlalchemy.orm import selectinload
 
 from core.Chat.schemas import ChatSchemasCreate, ChatGetList
 from core.models import User, Chat
@@ -55,9 +56,17 @@ async def get_group_chat(
         )
 
     now = datetime.now() - timedelta(days=7)
-    smtp = select(Chat).filter(Chat.groups_id == pk).filter(Chat.timestamp > now).order_by(Chat.timestamp)
 
-    result: Result = await session.execute(smtp)
+    # Изменяем запрос для загрузки связанных данных из таблицы Groups
+    stmt = (
+        select(Chat)
+        .options(selectinload(Chat.user))  # Подгружаем связанные данные из таблицы Groups
+        .filter(Chat.groups_id == pk)
+        .filter(Chat.timestamp > now)
+        .order_by(Chat.timestamp)
+    )
+
+    result = await session.execute(stmt)
     chats = result.scalars().all()
 
     return chats
