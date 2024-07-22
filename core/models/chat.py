@@ -12,9 +12,12 @@ if TYPE_CHECKING:
 
 
 class Chat(Base, IdIntPkMixin):
-    chaters = Column(String(30))
+
     content = Column(String(500))
     timestamp = Column(DateTime, default=func.now())
 
     groups_id = Column(Integer, ForeignKey('groups.id'))
     groups = relationship('Groups', back_populates='chat')
+
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship('User', back_populates='chat')

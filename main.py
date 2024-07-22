@@ -13,7 +13,7 @@ from core.PeopleCoursesAssociation.view import router as people_courses_router
 from core.Groups.view import router as groups_router
 from core.PeopleGroupsAssociation.view import router as people_groups_router
 from core.Lessons.view import router as lessons_router
-
+from core.Chat.view import router as chat_router
 
 
 @asynccontextmanager
@@ -56,13 +56,10 @@ main_app.include_router(
 main_app.include_router(
     lessons_router,
 )
+main_app.include_router(
+    chat_router,
+)
 
-
-
-#
-# if __name__ == "__main__":
-#     uvicorn.run("main:main_app", host="127.0.0.1", port=8000, reload=True)
-#     # uvicorn.run(main_app)
-
-# if __name__ == "__main__":
-#     uvicorn.run("main:app")
+if __name__ == "__main__":
+    uvicorn.run("main:main_app", host="127.0.0.1", port=8000, reload=True)
+    # uvicorn.run(main_app)

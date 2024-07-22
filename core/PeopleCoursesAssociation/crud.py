@@ -6,10 +6,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from core.PeopleCoursesAssociation.schemas import PeopleCoursesAssociationSchemasCreate
-from core.models import User, PeopleCoursesAssociation, People
+from core.mail.crud import send_email
+from core.models import User, PeopleCoursesAssociation, People, Courses
 from sqlalchemy.engine import Result
 from api.api_v1.fastapi_user_routers import current_user
 from core.schemas.user import UserRead
+from core.celery.tasks import send_email_task
 
 
 async def get_peoples_and_courses(session: AsyncSession) -> list[PeopleCoursesAssociation]:  # ожидаем список людей
@@ -20,12 +22,10 @@ async def get_peoples_and_courses(session: AsyncSession) -> list[PeopleCoursesAs
 
 
 async def create_peoples_and_courses(
-
         session: AsyncSession,
         people_and_courses_in: PeopleCoursesAssociationSchemasCreate,
         user: User,
         pk: int,
-
 ) -> PeopleCoursesAssociation:
     # Проверка, залогинен ли пользователь
     if user is None:
@@ -37,8 +37,8 @@ async def create_peoples_and_courses(
     # Получите user_id из текущего пользователя
     temp_id = user.id
 
-    stmt = select(People).filter(People.user_id == temp_id).order_by(People.id)  # получаем списолк игроков из базы
-    result: Result = await session.execute(stmt)  # получаем резуллттат
+    stmt = select(People).filter(People.user_id == temp_id).order_by(People.id)
+    result = await session.execute(stmt)
     people = result.scalars().first()
 
     if people is None:
@@ -49,10 +49,10 @@ async def create_peoples_and_courses(
     people_id = people.id
     courses_id = pk
 
-    stmt = (select(PeopleCoursesAssociation
-                   ).filter(PeopleCoursesAssociation.people_id == people_id)
+    stmt = (select(PeopleCoursesAssociation)
+            .filter(PeopleCoursesAssociation.people_id == people_id)
             .filter(PeopleCoursesAssociation.courses_id == courses_id))
-    result: Result = await session.execute(stmt)  # получаем резуллттат
+    result = await session.execute(stmt)
     pca = result.scalars().all()
 
     if pca:
@@ -61,13 +61,33 @@ async def create_peoples_and_courses(
             detail="Вы уже записаны на эти курсы",
         )
 
-    # Создайте объект People с установленными user_id и status_id
+    # Создайте объект PeopleCoursesAssociation
     peoples_and_courses = PeopleCoursesAssociation(
         people_id=people_id,
         courses_id=courses_id
     )
 
+    stmt = select(Courses).filter(Courses.id == courses_id)
+    result = await session.execute(stmt)
+    courses = result.scalars().first()
+
     session.add(peoples_and_courses)
     await session.commit()
-    await session.refresh(peoples_and_courses)  # обновляем данные перед возвратом
+    await session.refresh(peoples_and_courses)
+
+    if peoples_and_courses:
+        course_leader_email = 'saatarko@tut.by'
+
+        subject = "Новая заявка на курс"
+        body = (f"Уважаемый(ая),\n\nПоступила новая заявка на курс '{courses.name}' от пользователя "
+                f"'{people.first_name} {people.last_name}'.\n\nС уважением,\nКоманда.")
+
+        # Отправка email
+        await send_email(subject, course_leader_email, body)
+
+        # Отправляем email через Celery
+        # send_email_task.delay(subject, course_leader_email, body)
+
+        # для запуска celery используем celery -A celery_config.app worker -l info -P eventlet
+
     return peoples_and_courses
