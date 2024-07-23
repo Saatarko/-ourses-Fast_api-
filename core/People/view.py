@@ -2,6 +2,7 @@ from typing import List, Annotated
 
 from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.exceptions import ResponseValidationError
+from fastapi_cache.decorator import cache
 from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -49,6 +50,7 @@ async def add_student(
     return await crud.add_student(session=session, user=user, people_in=people_in)
 
 @router.get("/check", response_model=PeopleCheckResponceSchemas)
+@cache(expire=60)
 async def check_people(
         user: Annotated[User, Depends(current_user)],
         session: AsyncSession = Depends(db_helper.scope_session_dependency),
@@ -58,6 +60,7 @@ async def check_people(
     return PeopleCheckResponceSchemas(courses_and_groups_check=courses_and_groups_check)
 
 @router.get("/{pk}", response_model=PeopleSchemas)
+@cache(expire=60)
 async def get_one_people(
         pk: int,
         user: Annotated[User, Depends(current_user)],

@@ -1,6 +1,7 @@
 from typing import List, Annotated
 
 from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.api_v1.fastapi_user_routers import current_superuser, current_user
@@ -39,6 +40,7 @@ async def get_create_groups(
 
 
 @router.get("/", response_model=List[GroupsSchemas])
+@cache(expire=60)
 async def get_groups(
         user: Annotated[User, Depends(current_user)],
         session: AsyncSession = Depends(db_helper.scope_session_dependency),

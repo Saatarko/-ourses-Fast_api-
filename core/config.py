@@ -24,6 +24,7 @@ class ApiV1Prefix(BaseModel):
     peoplegroupesassociation: str = '/peoplegroupesassociation'
     lessons: str = '/lessons'
     chat: str = '/chat'
+    test: str = '/test'
 
 
 class ApiPrefix(BaseModel):
