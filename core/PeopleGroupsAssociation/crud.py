@@ -91,10 +91,16 @@ async def get_one_peoples_and_groups(
 
     temp_id = user.id
 
+    smtp = select(People).filter(People.user_id == temp_id)
+    result = await session.execute(smtp)
+    people = result.scalars().first()
+
+    people_id = people.id
+
     stmt = (
         select(Groups)
         .join(PeopleGroupsAssociation)
-        .filter(PeopleGroupsAssociation.people_id == temp_id)
+        .filter(PeopleGroupsAssociation.people_id == people_id)
     )
 
     result = await session.execute(stmt)
