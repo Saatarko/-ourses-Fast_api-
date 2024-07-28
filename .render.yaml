@@ -3,5 +3,7 @@ services:
     name: fastapi-app
     env: python
     plan: free
-    buildCommand: poetry install
+    buildCommand: |
+      poetry install
+      sh install_problematic_lib.sh
     startCommand: gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:main_app
