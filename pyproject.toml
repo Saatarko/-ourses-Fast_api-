@@ -32,6 +32,3 @@ fastapi-redis-cache-reborn = "^0.3.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.scripts]
-post-install = { script = "sh install_problematic_lib.sh" }
