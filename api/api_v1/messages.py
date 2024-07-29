@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter
 from fastapi import Depends
-
+from fastapi.responses import JSONResponse
 from core.schemas.user import UserRead
 from .fastapi_user_routers import current_user, current_superuser
 from core.config import settings
@@ -38,3 +38,7 @@ def get_superuser_messages(
         "messages": ["secrets-m1", "secrets-m2", "secrets-m3"],
         "user": UserRead.model_validate(user),  # получение текущего юзера в json
     }
+
+@router.get("/health")
+def health_check():
+    return JSONResponse(content={"status": "ok"}, status_code=200)

@@ -23,7 +23,6 @@ router = APIRouter(
 
 
 @router.get("/", response_model=List[LessonsSchemas])
-@cache(expire=60*60)
 async def get_lessons(
     user: Annotated[User, Depends(current_user)],
     session: AsyncSession = Depends(db_helper.scope_session_dependency),
@@ -36,17 +35,13 @@ async def get_lessons(
     return lessons_schemas
 
 @router.post("/list", response_model=List[LessonsSchemas])
-@cache(expire=60*60)
 async def get_list_lessons(
-    user: Annotated[User, Depends(current_user)],
     lesson_in: LessonList,
     session: AsyncSession = Depends(db_helper.scope_session_dependency),
 ):
+    lessons = await crud.get_list_lessons(session=session, lesson_in=lesson_in)
 
-    lessons = await crud.get_list_lessons(session=session, lesson_in=lesson_in,user=user)
-    # Преобразование списка курсов в список объектов, соответствующих схеме CoursesSchemas
     lessons_schemas = [LessonsSchemas.from_orm(lesson) for lesson in lessons]
-
     return lessons_schemas
 
 
