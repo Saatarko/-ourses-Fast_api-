@@ -29,7 +29,7 @@ load_dotenv()
 async def lifespan(app: FastAPI):
     # startup
     redis_url = os.getenv("UPSTASH_REDIS_URL", "https://deciding-scorpion-49624.upstash.io")
-    redis_token = os.getenv("UPSTASH_REDIS_TOKEN", "your-token-here")
+    redis_token = os.getenv("UPSTASH_REDIS_TOKEN", "AcHYAAIjcDFmZjIxOTE3YmVhMmI0NDlkYTg3YjJjNGUyMTEyMzNmMnAxMA")
 
     redis_client = Redis(url=redis_url, token=redis_token)
     FastAPICache.init(RedisBackend(redis_client), prefix="fastapi-cache")

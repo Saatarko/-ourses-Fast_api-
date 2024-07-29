@@ -1,11 +1,13 @@
+import os
+
 from celery import Celery
 
 # REDIS и CELERY настройки
-REDIS_HOST = '127.0.0.1'
-REDIS_PORT = '6379'
+UPSTASH_REDIS_URL = os.getenv('UPSTASH_REDIS_URL', 'https://deciding-scorpion-49624.upstash.io')
+UPSTASH_REDIS_TOKEN = os.getenv('UPSTASH_REDIS_TOKEN', 'AcHYAAIjcDFmZjIxOTE3YmVhMmI0NDlkYTg3YjJjNGUyMTEyMzNmMnAxMA')
 
-CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
-CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_BROKER_URL = f'redis://:{UPSTASH_REDIS_TOKEN}@{UPSTASH_REDIS_URL}/0'
+CELERY_RESULT_BACKEND = f'redis://:{UPSTASH_REDIS_TOKEN}@{UPSTASH_REDIS_URL}/0'
 
 app = Celery('fastapi_project', broker=CELERY_BROKER_URL, backend=CELERY_RESULT_BACKEND)
 
@@ -16,6 +18,5 @@ app.conf.update(
     result_serializer='json',
     timezone='UTC'
 )
-
 
 # для запуска celery используем celery -A celery_config.app worker -l info -P eventlet

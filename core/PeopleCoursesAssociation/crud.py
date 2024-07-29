@@ -86,7 +86,7 @@ async def create_peoples_and_courses(
         await send_email(subject, course_leader_email, body)
 
         # Отправляем email через Celery
-        # send_email_task.delay(subject, course_leader_email, body)
+        send_email_task.delay(subject, course_leader_email, body)
 
         # для запуска celery используем celery -A celery_config.app worker -l info -P eventlet
 
