@@ -22,4 +22,3 @@ services:
     envVars:
       - key: UPSTASH_REDIS_URL
         value: "redis://:AcHYAAIjcDFmZjIxOTE3YmVhMmI0NDlkYTg3YjJjNGUyMTEyMzNmMnAxMA@deciding-scorpion-49624.upstash.io:6379/0"
-
