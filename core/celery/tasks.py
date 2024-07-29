@@ -15,7 +15,6 @@ conf = ConnectionConfig(
     MAIL_SSL_TLS=False
 )
 
-
 @app.task
 async def send_email_task(subject: str, recipient: EmailStr, body: str):
     message = MessageSchema(
@@ -28,5 +27,6 @@ async def send_email_task(subject: str, recipient: EmailStr, body: str):
     fm = FastMail(conf)
 
     await fm.send_message(message)
+
 
 # для запуска celery используем celery -A celery_config.app worker -l info -P eventlet
